@@ -8,13 +8,10 @@ export default defineConfig({
     lib: {
       entry: 'src/index.ts',
       formats: ['es'],
-      fileName: 'server'
+      fileName: 'server',
     },
     rollupOptions: {
-      external: [
-        ...builtinModules,
-        ...builtinModules.map(m => `node:${m}`),
-      ],
+      external: [...builtinModules, ...builtinModules.map((m) => `node:${m}`)],
     },
     minify: false,
     sourcemap: true,

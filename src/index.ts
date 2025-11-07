@@ -1,24 +1,30 @@
 import http from 'http';
-import { GET } from '../src/methods/GET.ts';
+import { GET } from './methods/GET.ts';
+import { POST } from './methods/POST.ts';
+import { serverHandler } from './utils/serverHandler.ts';
 
 const server = http.createServer();
-server.on('request', (req, res) => {
-  const url = req.url?.split('/').slice(0, 3).join('/')
+server.on('request', async (req, res) => {
+  const url = req.url?.split('/').slice(0, 3).join('/');
   res.setHeader('Content-Type', 'application/json');
 
-  if ( url === "/api/users"){
-    if (req.method === "GET") {
-      const response = GET(req.url);
-      if (response?.status) {
-      res.statusCode = response.status;
-      res.write(JSON.stringify(response.user));
-      res.end();
+  if (url === '/api/users') {
+    switch (req.method) {
+      case 'GET': {
+        const getUser = GET(req.url);
+        serverHandler(res, getUser);
+        break;
       }
+      case 'POST': {
+        const newUser = await POST(req);
+        serverHandler(res, newUser);
+        break;
+      }
+      default:
+        res.statusCode = 404;
+        res.write('Invalid URL');
+        res.end();
     }
-  } else {
-    res.statusCode = 404;
-    res.write('Invalid URL');
-    res.end();
   }
 });
 
