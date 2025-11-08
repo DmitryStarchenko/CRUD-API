@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon --exec \"node src/index.ts\" --watch src -e ts,js,json",
-    "build": "vite build",
-    "start": "node dist/server.js",
+    "prod": "vite build && node dist/server.js",
     "type-check": "tsc --noEmit",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
