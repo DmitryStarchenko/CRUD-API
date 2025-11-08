@@ -3,6 +3,7 @@ import { GET } from './methods/GET.ts';
 import { POST } from './methods/POST.ts';
 import { serverHandler } from './utils/serverHandler.ts';
 import { PUT } from './methods/PUT.ts';
+import { DELETE } from './methods/DELETE.ts';
 
 const server = http.createServer();
 server.on('request', async (req, res) => {
@@ -24,6 +25,11 @@ server.on('request', async (req, res) => {
       case 'PUT': {
         const updateUser = await PUT(req);
         serverHandler(res, updateUser);
+        break;
+      }
+      case 'DELETE': {
+        const message = DELETE(req.url);
+        serverHandler(res, message);
         break;
       }
       default:
