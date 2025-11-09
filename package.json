@@ -4,8 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --exec \"node src/index.ts\" --watch src -e ts,js,json",
-    "prod": "vite build && node dist/server.js",
+    "start:dev": "nodemon --exec \"node src/run.ts\" --watch src -e ts,js,json",
+    "start:prod": "vite build && node dist/server.js",
+    "start:multi": "node src/cluster.ts",
     "type-check": "tsc --noEmit",
     "lint": "eslint",
     "lint:fix": "eslint --fix",

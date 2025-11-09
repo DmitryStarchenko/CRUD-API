@@ -1,37 +1,42 @@
 import type { IncomingMessage } from 'http';
-import type { IResponse, IStore } from '../types/types';
 import { v4 as uuidv4 } from 'uuid';
-import { store } from '../store/store.ts';
+import { addToStore } from '../store/store.ts';
+import type { IResponse } from '../types/types.ts';
 
-export const POST = (req: IncomingMessage): Promise<Partial<IResponse>> => {
-  const response: Partial<IResponse> = {};
-  return new Promise((resolve, reject) => {
-    req.on('data', (chunk) => {
-      const { username = undefined, age = undefined, hobbies = undefined } = JSON.parse(chunk);
-      if (!username || !age || !hobbies) {
-        response.status = 400;
-        response.data = 'username, age and hobbies are required';
-        resolve(response);
-      } else {
-        const userId = uuidv4();
-        const newUser: IStore = {
-          id: userId,
-          username: username,
-          age: age,
-          hobbies: hobbies,
+export const POST = async (req: IncomingMessage): Promise<IResponse> => {
+  return new Promise((resolve) => {
+    let body = '';
+    req.on('data', (chunk: string) => {
+      body += chunk.toString();
+    });
+    req.on('end', async () => {
+      try {
+        const { id, username, age, hobbies } = JSON.parse(body);
+        if (id || !username || !age || !hobbies) {
+          resolve({
+            statusCode: 400,
+            data: 'username, age and hobbies are required',
+          });
+          return;
+        }
+        const userData = JSON.parse(body);
+        const newUser = {
+          id: uuidv4(),
+          ...userData,
         };
-        store.push(newUser);
-        response.status = 201;
-        response.data = newUser;
+
+        await addToStore(newUser);
+
+        resolve({
+          statusCode: 201,
+          data: newUser,
+        });
+      } catch {
+        resolve({
+          statusCode: 400,
+          data: 'Invalid JSON',
+        });
       }
-    });
-
-    req.on('end', () => {
-      resolve(response);
-    });
-
-    req.on('error', (err) => {
-      reject(err);
     });
   });
 };

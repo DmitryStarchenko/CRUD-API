@@ -1,29 +1,34 @@
-import { store } from '../store/store.ts';
-import type { IResponse } from '../types/types.ts';
 import { validate } from 'uuid';
+import { getStore, findInStore } from '../store/store.ts';
 
-export const GET = (url: string | undefined) => {
-  const response: Partial<IResponse> = {};
-  const userId = url?.split('/')[3];
-  if (userId && validate(userId)) {
-    for (let i = 0; i < store.length; i++) {
-      if (userId === store[i].id.toString()) {
-        response.status = 200;
-        response.data = store[i];
-        return response;
-      }
-    }
-
-    response.status = 404;
-    response.data = 'This user does not exist';
-    return response;
-  } else if (!userId) {
-    response.status = 200;
-    response.data = store;
-    return response;
+export const GET = async (url: string) => {
+  if (url === '/api/users') {
+    const store = await getStore();
+    return {
+      statusCode: 200,
+      data: store,
+    };
   } else {
-    response.status = 400;
-    response.data = 'Invalid userID';
-    return response;
+    const userId = url.split('/').pop();
+    if (validate(userId)) {
+      if (userId) {
+        const user = await findInStore(userId);
+        if (user) {
+          return {
+            statusCode: 200,
+            data: user,
+          };
+        }
+      }
+      return {
+        statusCode: 404,
+        data: 'User not found',
+      };
+    } else {
+      return {
+        statusCode: 400,
+        data: 'Invalid userID',
+      };
+    }
   }
 };

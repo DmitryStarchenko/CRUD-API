@@ -6,6 +6,6 @@ export interface IStore {
 }
 
 export interface IResponse {
-  status: number;
+  statusCode: number;
   data: IStore | IStore[] | string;
 }
