@@ -6,7 +6,7 @@ export default defineConfig({
     target: 'node18',
     outDir: 'dist',
     lib: {
-      entry: 'src/index.ts',
+      entry: 'src/run.ts',
       formats: ['es'],
       fileName: 'server',
     },
