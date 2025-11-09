@@ -1,6 +1,6 @@
 import type { IncomingMessage } from 'http';
 import { validate } from 'uuid';
-import { getStore, updateStore, findInStore } from '../store/store.ts';
+import { getStore, updateUser, getUser } from '../store/store.ts';
 import type { IResponse } from '../types/types.ts';
 
 export const PUT = async (req: IncomingMessage): Promise<IResponse> => {
@@ -16,7 +16,7 @@ export const PUT = async (req: IncomingMessage): Promise<IResponse> => {
         const userId = urlParts[urlParts.length - 1];
 
         if (validate(userId)) {
-          const existingUser = await findInStore(userId);
+          const existingUser = await getUser(userId);
           if (!existingUser) {
             resolve({
               statusCode: 404,
@@ -37,7 +37,7 @@ export const PUT = async (req: IncomingMessage): Promise<IResponse> => {
           const updatedStore = store.map((item) =>
             item.id === userId ? { ...item, ...userData } : item,
           );
-          await updateStore(updatedStore);
+          await updateUser(updatedStore);
 
           resolve({
             statusCode: 200,
@@ -51,8 +51,8 @@ export const PUT = async (req: IncomingMessage): Promise<IResponse> => {
         }
       } catch {
         resolve({
-          statusCode: 400,
-          data: 'Invalid JSON',
+          statusCode: 500,
+          data: 'Internal server error',
         });
       }
     });

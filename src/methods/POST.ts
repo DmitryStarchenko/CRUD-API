@@ -1,6 +1,6 @@
 import type { IncomingMessage } from 'http';
 import { v4 as uuidv4 } from 'uuid';
-import { addToStore } from '../store/store.ts';
+import { addUser } from '../store/store.ts';
 import type { IResponse } from '../types/types.ts';
 
 export const POST = async (req: IncomingMessage): Promise<IResponse> => {
@@ -25,7 +25,7 @@ export const POST = async (req: IncomingMessage): Promise<IResponse> => {
           ...userData,
         };
 
-        await addToStore(newUser);
+        await addUser(newUser);
 
         resolve({
           statusCode: 201,
@@ -33,8 +33,8 @@ export const POST = async (req: IncomingMessage): Promise<IResponse> => {
         });
       } catch {
         resolve({
-          statusCode: 400,
-          data: 'Invalid JSON',
+          statusCode: 500,
+          data: 'Internal server error',
         });
       }
     });

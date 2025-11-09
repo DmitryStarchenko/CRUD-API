@@ -1,12 +1,12 @@
 import { validate } from 'uuid';
-import { removeFromStore, findInStore } from '../store/store.ts';
+import { removeUser, getUser } from '../store/store.ts';
 
 export const DELETE = async (url: string) => {
   const urlParts = url.split('/');
   const userId = urlParts[urlParts.length - 1];
 
   if (validate(userId)) {
-    const existingUser = await findInStore(userId);
+    const existingUser = await getUser(userId);
     if (!existingUser) {
       return {
         statusCode: 404,
@@ -14,7 +14,7 @@ export const DELETE = async (url: string) => {
       };
     }
 
-    await removeFromStore(userId);
+    await removeUser(userId);
 
     return {
       statusCode: 200,

@@ -1,5 +1,5 @@
 import { validate } from 'uuid';
-import { getStore, findInStore } from '../store/store.ts';
+import { getStore, getUser } from '../store/store.ts';
 
 export const GET = async (url: string) => {
   if (url === '/api/users') {
@@ -12,7 +12,7 @@ export const GET = async (url: string) => {
     const userId = url.split('/').pop();
     if (validate(userId)) {
       if (userId) {
-        const user = await findInStore(userId);
+        const user = await getUser(userId);
         if (user) {
           return {
             statusCode: 200,

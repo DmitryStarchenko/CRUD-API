@@ -28,24 +28,24 @@ export const getStore = async (): Promise<IStore[]> => {
   return store;
 };
 
-export const addToStore = async (item: IStore) => {
+export const addUser = async (item: IStore) => {
   const currentStore = await getStore();
   currentStore.push(item);
-  await updateStore(currentStore);
+  await updateUser(currentStore);
 };
 
-export const updateStore = async (newStore: IStore[]) => {
+export const updateUser = async (newStore: IStore[]) => {
   store = newStore;
   await writeStore(store);
 };
 
-export const removeFromStore = async (id: string) => {
+export const removeUser = async (id: string) => {
   const currentStore = await getStore();
   const updatedStore = currentStore.filter((item) => item.id !== id);
-  await updateStore(updatedStore);
+  await updateUser(updatedStore);
 };
 
-export const findInStore = async (id: string): Promise<IStore | undefined> => {
+export const getUser = async (id: string): Promise<IStore | undefined> => {
   const currentStore = await getStore();
   return currentStore.find((item) => item.id === id);
 };
