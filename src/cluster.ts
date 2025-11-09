@@ -4,7 +4,7 @@ import http from 'http';
 import { createServer } from './server.ts';
 
 const numCPUs = os.cpus().length;
-const basePort = parseInt(process.env.PORT || '4000');
+const basePort = parseInt(process.env.CLUSTER_PORT || '4000');
 const workerCount = numCPUs - 1;
 
 if (cluster.isPrimary) {
