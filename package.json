@@ -1,0 +1,38 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start:dev": "nodemon --exec \"node src/run.ts\" --watch src -e ts,js,json",
+    "start:prod": "vite build && node dist/server.js",
+    "start:multi": "node src/cluster.ts",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "format-fix": "prettier --write .",
+    "format:check": "prettier ./src --check",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^24.10.0",
+    "@types/supertest": "^6.0.3",
+    "@types/uuid": "^10.0.0",
+    "@vitest/ui": "^4.0.8",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.5.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "supertest": "^7.1.4",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.46.3",
+    "vite": "^7.2.0",
+    "vite-plugin-node": "^7.0.0",
+    "vitest": "^4.0.8"
+  },
+  "dependencies": {
+    "uuid": "^13.0.0"
+  }
+}
